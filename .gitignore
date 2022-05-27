@@ -32,6 +32,7 @@
 *.app
 
 # Get rid of VS stuff so that its not a pain for me to commit
+x64/
 .vs/
 *.sln
 *.vcxproj

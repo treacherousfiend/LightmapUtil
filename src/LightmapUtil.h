@@ -5,7 +5,7 @@
 
 using namespace std;
 
-#define PROGRAM_VERSION		1
+#define PROGRAM_VERSION		2
 
 ifstream in; // This is the default stream we use
 void* bspFile; // This is going to be where the full BSP file is stored

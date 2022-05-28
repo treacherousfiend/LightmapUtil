@@ -38,3 +38,6 @@ x64/
 *.vcxproj
 *.filters
 *.user
+
+# Ignore default CMake build location
+build/

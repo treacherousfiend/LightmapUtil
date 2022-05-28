@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <vector>
 #include <filesystem>
+#include <cstring>
 
 #include "LightmapUtil.h"
 

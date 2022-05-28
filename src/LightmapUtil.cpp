@@ -201,19 +201,17 @@ void readFaces()
 			{
 				// first neighbor lightmap sample is out here because the value needed to be initialized. i am dumb and forgot that.
 				int lightmapSample2 = lightmapSample1 - 1;
-				for (int j = 1; j < 4; ++j)
+				for (int j = 0; j < 4; ++j)
 				{
-					// you may be asking, where is case 1?
-					// the answer is, it was here and now its not and i'm too lazy to change 4 numbers
 					switch (j)
 					{
-					case 2:
+					case 1:
 						lightmapSample2 = lightmapSample1 + 1;
 						break;
-					case 3:
+					case 2:
 						lightmapSample2 = lightmapSample1 - ( curFace.m_LightmapTextureSizeInLuxels[ 0 ] + 1 );
 						break;
-					case 4:
+					case 3:
 						lightmapSample2 = lightmapSample1 + ( curFace.m_LightmapTextureSizeInLuxels[ 0 ] + 1 );
 						break;
 					}

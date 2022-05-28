@@ -185,7 +185,7 @@ void readFaces()
 	for (unsigned int i = 0; i < numFaces; i++)
 	{
 		dface_t curFace = dface[ i ];
-		if ( curFace.lightofs != -1 || curFace.texinfo  != -1 )
+		if ( curFace.lightofs != -1 && curFace.texinfo  != -1 )
 		{
 			// hack?? offset is divided by 4 because we store each lightmap sample in a 4 byte struct.
 			int lightmapOffset = curFace.lightofs / 4;

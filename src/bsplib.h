@@ -232,7 +232,49 @@ struct dface_t
 	int			m_LightmapTextureSizeInLuxels[ 2 ];
 
 	int origFace;				// reference the original face this face was derived from
+
+public:
+
+	unsigned short GetNumPrims() const;
+	void SetNumPrims( unsigned short nPrims );
+	bool AreDynamicShadowsEnabled();
+	void SetDynamicShadowsEnabled( bool bEnabled );
+
+	// non-polygon primitives (strips and lists)
+private:
+	unsigned short m_NumPrims;	// Top bit, if set, disables shadows on this surface (this is why there are accessors).
+
+public:
+	unsigned short	firstPrimID;
+
+	unsigned int	smoothingGroups;
 };
+
+inline unsigned short dface_t::GetNumPrims() const
+{
+	return m_NumPrims & 0x7FFF;
+}
+
+inline void dface_t::SetNumPrims( unsigned short nPrims )
+{
+	// (fiend) Assert changed to assert because one is valve defined and one is c++ standard
+	assert( ( nPrims & 0x8000 ) == 0 );
+	m_NumPrims &= ~0x7FFF;
+	m_NumPrims |= ( nPrims & 0x7FFF );
+}
+
+inline bool dface_t::AreDynamicShadowsEnabled()
+{
+	return ( m_NumPrims & 0x8000 ) == 0;
+}
+
+inline void dface_t::SetDynamicShadowsEnabled( bool bEnabled )
+{
+	if (bEnabled)
+		m_NumPrims &= ~0x8000;
+	else
+		m_NumPrims |= 0x8000;
+}
 
 typedef struct texinfo_s
 {

@@ -2,7 +2,13 @@
 
 A simple command line utility to tell you if your lightmaps are too high resolution (and maybe more soon?)
 
-I'm not entirely sure the building requirements, but I use the C++20 Standard and VS v143 Platform Toolset
+## Usage
+
+### Build Requirements
+
+* C++20
+
+This is developed with VS v143 Platform Toolset. Other configurations may work, but are not intentionally supported.
 
 ## To-do
  

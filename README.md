@@ -4,6 +4,10 @@ A simple command line utility to tell you if your lightmaps are too high resolut
 
 ## Usage
 
+The program can be run with `LightmapUtil.exe filename.bsp`. This generates `filename-LightmapUtilLog.txt` that provides you with details about lightmapping on that map file.
+
+Note: map files currently must be uncompressed. If they are compressed, the `bspzip` utility included in source engine games can be used to decompress maps: `bspzip -repack filename.bsp`
+
 ### Build Requirements
 
 * C++20

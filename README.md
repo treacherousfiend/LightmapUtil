@@ -10,7 +10,9 @@ A simple command line utility to tell you if your lightmaps are too high resolut
 
 This is developed with VS v143 Platform Toolset. Other configurations may work, but are not intentionally supported.
 
-## To-do
+## For Developers
+
+### To-do
  
 - Tell the user if they have lightmaps which are too low res
 - Progress bar? (not really needed due to how fast the program is)
@@ -19,7 +21,7 @@ This is developed with VS v143 Platform Toolset. Other configurations may work, 
 - Support compressed TF2 maps
 - Maybe give the user a suggestion for what the lightmap res should be?
  
-## Licensing
+### Licensing
  
 This repository is unlicensed -- almost all of the BSP reading related code (in bsplib.h and the other code files) is either taken directly from the [Source 2013 SDK](https://github.com/ValveSoftware/source-sdk-2013/) or heavily based on it.
  

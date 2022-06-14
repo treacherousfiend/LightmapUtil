@@ -356,11 +356,11 @@ void readFaces()
 					case 2:
 						if (curPlane.normalZ < 0)
 						{
-							direction = "up";
+							direction = "down";
 						}
 						else
 						{
-							direction = "down";
+							direction = "up";
 						}
 					case 3:
 						if (curPlane.normalX < 0)
@@ -383,11 +383,11 @@ void readFaces()
 					case 5:
 						if (curPlane.normalZ < 0)
 						{
-							direction = "mostly up";
+							direction = "mostly down";
 						}
 						else
 						{
-							direction = "mostly down";
+							direction = "mostly up";
 						}
 					}
 				}

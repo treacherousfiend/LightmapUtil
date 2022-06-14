@@ -289,7 +289,7 @@ typedef struct texinfo_s
 struct dtexdata_t
 {
 	// (fiend) once again splitting a vector into 3 floats because fuck you
-	float		refelctivity[ 3 ];
+	float		reflectivity[ 3 ];
 	int			nameStringTableID;				// index into g_StringTable for the texture name
 	int			width, height;					// source image
 	int			view_width, view_height;		//

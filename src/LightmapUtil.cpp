@@ -69,16 +69,26 @@ int main( int argc, char *argv[] )
 			}
 
 			lightmapQualityEpsilon = strtof(argv[ i + 1 ], NULL);
-			// crappily clamap lightmapQualityEpsilon to 0-1
+			// crappily clamp lightmapQualityEpsilon to 0-1
 			if (lightmapQualityEpsilon > 1.0f)
 			{
 				lightmapQualityEpsilon = 1.0f;
 			}
 			else if (lightmapQualityEpsilon <= 0.0f)
 			{
-				lightmapQualityEpsilon = 0.1f;
-				cout << "qualitythreshold was less than or equal to 0 and was clamped to 0.1\nThis may have happened because you entered something that wasn't a decimal!\n";
+				lightmapQualityEpsilon = 0.01f;
+				cout << "qualitythreshold was less than or equal to 0 and was clamped to 0.01\nThis may have happened because you entered something that wasn't a decimal!\n";
 			}
+		}
+		// -ldr
+		else if (argv[ i ] == launchArgs[ 7 ].command)
+		{
+			checkHDRLightmap = false;
+		}
+		// -hdr
+		else if (argv[ i ] == launchArgs[ 8 ].command)
+		{
+			checkLDRLightmap = false;
 		}
 	}
 	
@@ -142,9 +152,32 @@ int main( int argc, char *argv[] )
 	getLumpData( LUMP_PLANES, numPlanes, dplane );
 	
 	// this is kinda stupid because numLightmaps isn't helpful, but its easier than writing a new function just for reading lightmap lumps
-	getLumpData( LUMP_LIGHTING, numLightmapsLDR, dlightdataLDR );
-	getLumpData( LUMP_LIGHTING_HDR, numLightmapsHDR, dlightdataHDR);
+	if (checkLDRLightmap == true)
+	{
+		getLumpData( LUMP_LIGHTING, numLightmapsLDR, dlightdataLDR );
+	}
+	if (checkHDRLightmap == true)
+	{
+		getLumpData( LUMP_LIGHTING_HDR, numLightmapsHDR, dlightdataHDR );
+	}
 	
+	if (numLightmapsLDR == 0 && numLightmapsHDR == 0)
+	{
+		cerr << "ERROR: Could not read lightmap lumps!\n";
+		return 6;
+	}
+	
+	// Check which lightmap lumps we've read so that we don't waste time attempting to compare non-existant lightmaps later
+	if (numLightmapsLDR != 0)
+	{
+		hasLDRLightmap = true;
+	}
+
+	if (numLightmapsHDR != 0)
+	{
+		hasHDRLightmap = true;
+	}
+
 	getLumpData( LUMP_FACES, numFaces, dface );
 	getLumpData( LUMP_TEXINFO, numTexinfo, texinfo );
 	getLumpData( LUMP_TEXDATA, numTexdata, dtexdata );
@@ -392,7 +425,7 @@ void helpScreen()
 	{
 		string commandMessage;
 
-		// if -help or -verbose (the alt commands), just skip the rest of the commands, we don't need to display these.
+		// if -help or -verbose (the alt commands), just skip to the next command, we don't need to display these.
 		if (i != 1 && i != 5)
 		{
 			commandMessage.append( launchArgs[ i ].command );

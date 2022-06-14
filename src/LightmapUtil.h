@@ -20,7 +20,7 @@ struct launchArgument
 	string description;
 };
 
-// this is probably not the best way to do these but in my eyes its at least better than just having all the text in the ifelse which reads these things
+// this is probably not the best way to do these but in my eyes its at least better than just having all the text in the if/else which reads these things
 vector<launchArgument> launchArgs = {
 	launchArgument{"-h", "Show this screen (program will stop afterwards)"},
 	launchArgument{"-help", "Show this screen (program will stop afterwards)"},
@@ -28,15 +28,23 @@ vector<launchArgument> launchArgs = {
 	launchArgument{"-logfile", "Set location of logfile (Default is map file location)"},
 	launchArgument{"-v", "Show additional debug info"},
 	launchArgument{"-verbose", "Show additional debug info"},
-	launchArgument{"-qualitythreshold", "Set a custom threshold percentage for lightmap sample similarity\n                    Accepts decimals from 0-1 (Default is 0.3)"} // spaces here are for formatting. its bad i know
+	launchArgument{"-qualitythreshold", "Set a custom threshold percentage for lightmap sample similarity\n                    Accepts decimals from 0-1 (Default is 0.03). It is recommended to set a percentage under 10%!"}, // spaces here are for formatting. its bad i know
 };
 
 bool verboseMode = false;
 
 // This quality epsilon is a float because I want it to be able to be changed at runtime
-float lightmapQualityEpsilon = 0.3f;
+// .03 is an arbitrary number, it seems to me from testing that this is probably one of the best numbers to lower false positives and false negatives.
+float lightmapQualityEpsilon = 0.03f;
 
 bool normalsForDirection = false;
+
+// Both are true unless -ldr or -hdr is used, in which case the unneeded lightmap is set to false.
+bool checkLDRLightmap = true;
+bool checkHDRLightmap = true;
+
+bool hasLDRLightmap = false;
+bool hasHDRLightmap = false;
 
 int main( int argc, char* argv[] );
 

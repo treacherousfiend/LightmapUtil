@@ -55,7 +55,7 @@ void getLumpData( int lump, unsigned int &numObjects, T *lumpType );
 void checkSampleNeighbors( int lightmapSample1, int lightmapSample2, bool &LDRLightmapTooBig, bool &HDRLightmapTooBig );
 
 void readFaces();
-void helpScreen();
+int helpScreen();
 
 // ------------------------- //
 

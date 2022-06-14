@@ -41,3 +41,7 @@ x64/
 
 # Ignore default CMake build location
 build/
+
+# ignore program input
+*.bsp
+

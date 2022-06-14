@@ -17,8 +17,7 @@ int main( int argc, char *argv[] )
 	
 	if (argc == 1)
 	{
-		helpScreen();
-		return 1;
+		return helpScreen();
 	}
 
 	// open up our file if it exists, if it doesn't, don't stop here, we still need to show the help screen
@@ -36,8 +35,7 @@ int main( int argc, char *argv[] )
 		// -h OR -help
 		if (argv[ i ] == launchArgs[ 0 ].command || argv[ i ] == launchArgs[ 1 ].command)
 		{
-			helpScreen();
-			return 1;
+			return helpScreen();
 		}
 		// -usenormals
 		else if ( argv[ i ] == launchArgs[ 2 ].command )
@@ -478,7 +476,7 @@ void checkSampleNeighbors( int lightmapSample1, int lightmapSample2, bool &LDRLi
 	}
 }
 
-void helpScreen()
+int helpScreen()
 {
 	cout << "Usage: LightmapUtil [BSP_FILE] [LAUNCH_ARGUMENTS]\n\n" << "Available options:\n";
 	for (int i = 0; i < launchArgs.size(); i++)
@@ -505,4 +503,5 @@ void helpScreen()
 			cout << commandMessage;
 		}
 	}
+  return 0;
 }

@@ -45,3 +45,5 @@ build/
 # ignore program input
 *.bsp
 
+# ignore program output
+*-LightmapUtilLog.txt

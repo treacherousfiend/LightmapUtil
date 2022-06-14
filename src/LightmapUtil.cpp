@@ -226,11 +226,15 @@ void readFaces()
 
 			// these are in terms of LIGHTMAP RESOLUTION, not LUXEL SIZE.
 			//bool lightmapTooSmall; // Is our lightmap small enough that we're losing out on potential detail? (NOT IMPLEMENTED YET)
-			bool lightmapTooBig = false; // is our lightmap big enough that we're wasting precious precious disk space
+
+			// this is a bit confusing, essentially we consider our lightmaps to be too big until we determine that they are not.
+			// we originally set these booleans to if we have that lightmap in the first place, that way we can skip the lightmaps we don't have.
+			bool LDRLightmapTooBig = hasLDRLightmap; // is our lightmap big enough that we're wasting precious precious disk space
+			bool HDRLightmapTooBig = hasHDRLightmap;
 
 			// We check through every single sample of a face
 			// probably could do some interesting optimizations where we do every other and extrapolate info, but this doesn't right now
-			for (int lightmapSample1 = 0; lightmapSample1 < lightmapSize && lightmapTooBig != true; lightmapSample1++)
+			for (int lightmapSample1 = 0; lightmapSample1 < lightmapSize && (LDRLightmapTooBig == true || HDRLightmapTooBig == true); lightmapSample1++)
 			{
 				// first neighbor lightmap sample is out here because the value needed to be initialized. i am dumb and forgot that.
 				int lightmapSample2 = lightmapSample1 - 1;
@@ -251,30 +255,17 @@ void readFaces()
 
 					if (lightmapSample2 >= 0 && lightmapSample2 < lightmapSize)
 					{
-						// this is a mess and i hate it, essentially the RGB values they use in game are the raw color values multiplied by 2^exponent
-						// I don't know why, but the exponent is a *signed* char, and they add 128 to it
-						// like, because they add 128, the max value is 256 and the min is 1. so its just an unsigned char but stupid.
-						char sample1E = dlightdataLDR[ lightmapSample1 ].exponent;
-						float sample1R = dlightdataLDR[ lightmapSample1 ].r * 2 ^ ( (int)sample1E + 128 );
-						float sample1G = dlightdataLDR[ lightmapSample1 ].g * 2 ^ ( (int)sample1E + 128 );
-						float sample1B = dlightdataLDR[ lightmapSample1 ].b * 2 ^ ( (int)sample1E + 128 );
-						char sample2E = dlightdataLDR[ lightmapSample2 ].exponent;
-						float sample2R = dlightdataLDR[ lightmapSample2 ].r * 2 ^ ( (int)sample2E + 128 );
-						float sample2G = dlightdataLDR[ lightmapSample2 ].g * 2 ^ ( (int)sample2E + 128 );
-						float sample2B = dlightdataLDR[ lightmapSample2 ].b * 2 ^ ( (int)sample2E + 128 );
-
-						// not a big fan of this, but it used to be worse.
-						if (abs( sample1R - sample2R ) < lightmapQualityEpsilon
-							&& abs( sample1G - sample2G ) < lightmapQualityEpsilon
-							&& abs( sample1B - sample2B ) < lightmapQualityEpsilon)
+						checkSampleNeighbors(lightmapSample1, lightmapSample2, LDRLightmapTooBig, HDRLightmapTooBig);
+						if (LDRLightmapTooBig == false && HDRLightmapTooBig == false)
 						{
-							lightmapTooBig = true;
+							// early out if we've already determined that this isn't too big
+							j = 4;
 						}
 					}
 				}
 			}
 
-			if (lightmapTooBig == true)
+			if (LDRLightmapTooBig == true || HDRLightmapTooBig == true)
 			{
 				int FaceID = i;
 				int texdatastringoffset = g_TexDataStringTable[dtexdata[ texinfo[ curFace.texinfo ].texdata ].nameStringTableID];
@@ -406,14 +397,83 @@ void readFaces()
 					Texture = "UNKNOWN";
 				}
 
-				logFile << "Face " << FaceID << " (" << approxCenter.vertX << " " << approxCenter.vertY << " " << approxCenter.vertZ << ") facing " << direction << " with texture " << Texture << " has " << LightmapIssue << " lightmap!\n";
+				stringstream faceLog;
+
+				faceLog << "Face " << FaceID << " (" << approxCenter.vertX << " " << approxCenter.vertY << " " << approxCenter.vertZ << ") facing " << direction << " with texture " << Texture << " has " << LightmapIssue << " lightmap!";
+
+				if (hasLDRLightmap == true && hasHDRLightmap == true)
+				{
+					if (LDRLightmapTooBig == true && HDRLightmapTooBig == true)
+					{
+						faceLog << "\n";
+					}
+					else if (LDRLightmapTooBig == true)
+					{
+						faceLog << " (LDR)\n";
+					}
+					// probably don't need this to be an else if, but its clearer what it does
+					else if (HDRLightmapTooBig == true)
+					{
+						faceLog << " (HDR)\n";
+					}
+				}
+
+				string logString = faceLog.str();
+
+				// Output to the log file
+				logFile << logString;
 
 				// if -verbose is used, also output to the console
 				if (verboseMode)
 				{
-					cout << "Face " << FaceID << " (" << approxCenter.vertX << " " << approxCenter.vertY << " " << approxCenter.vertZ << ") facing " << direction << " with texture " << Texture << " has " << LightmapIssue << " lightmap!\n";
+					cout << logString;
 				}
 			}
+		}
+	}
+}
+
+void checkSampleNeighbors( int lightmapSample1, int lightmapSample2, bool &LDRLightmapTooBig, bool &HDRLightmapTooBig)
+{
+	// this is a mess and i hate it, essentially the RGB values they use in game are the raw color values multiplied by 2^exponent / 255
+	// Valve's code is extremely speed focused, so the way they handle the exponent is super confusing
+	// if you ever need to look into it, they've precomputed all of the values (2^-128 to 2^127), but arrays require positive numbers, so they add 128 to the exponent's value to find it.
+	if ( hasLDRLightmap == true )
+	{
+		float sample1E = dlightdataLDR[ lightmapSample1 ].exponent;
+		float sample1R = dlightdataLDR[ lightmapSample1 ].r * ( pow( 2.0f, sample1E ) / 255 );
+		float sample1G = dlightdataLDR[ lightmapSample1 ].g * ( pow( 2.0f, sample1E ) / 255 );
+		float sample1B = dlightdataLDR[ lightmapSample1 ].b * ( pow( 2.0f, sample1E ) / 255 );
+		float sample2E = dlightdataLDR[ lightmapSample2 ].exponent;
+		float sample2R = dlightdataLDR[ lightmapSample2 ].r * ( pow( 2.0f, sample2E ) / 255 );
+		float sample2G = dlightdataLDR[ lightmapSample2 ].g * ( pow( 2.0f, sample2E ) / 255 );
+		float sample2B = dlightdataLDR[ lightmapSample2 ].b * ( pow( 2.0f, sample2E ) / 255 );
+
+		// not a big fan of this, but it used to be worse.
+		if (abs( sample1R - sample2R ) > lightmapQualityEpsilon
+			|| abs( sample1G - sample2G ) > lightmapQualityEpsilon
+			|| abs( sample1B - sample2B ) > lightmapQualityEpsilon)
+		{
+			LDRLightmapTooBig = false;
+		}
+	}
+
+	if ( hasHDRLightmap == true )
+	{
+		float HDRsample1E = dlightdataHDR[ lightmapSample1 ].exponent;
+		float HDRsample1R = dlightdataHDR[ lightmapSample1 ].r * ( pow( 2.0f, HDRsample1E ) / 255 );
+		float HDRsample1G = dlightdataHDR[ lightmapSample1 ].g * ( pow( 2.0f, HDRsample1E ) / 255 );
+		float HDRsample1B = dlightdataHDR[ lightmapSample1 ].b * ( pow( 2.0f, HDRsample1E ) / 255 );
+		float HDRsample2E = dlightdataHDR[ lightmapSample2 ].exponent;
+		float HDRsample2R = dlightdataHDR[ lightmapSample2 ].r * ( pow( 2.0f, HDRsample2E ) / 255 );
+		float HDRsample2G = dlightdataHDR[ lightmapSample2 ].g * ( pow( 2.0f, HDRsample2E ) / 255 );
+		float HDRsample2B = dlightdataHDR[ lightmapSample2 ].b * ( pow( 2.0f, HDRsample2E ) / 255 );
+
+		if (abs( HDRsample1R - HDRsample2R ) > lightmapQualityEpsilon
+			|| abs( HDRsample1G - HDRsample2G ) > lightmapQualityEpsilon
+			|| abs( HDRsample1B - HDRsample2B ) > lightmapQualityEpsilon)
+		{
+			HDRLightmapTooBig = false;
 		}
 	}
 }

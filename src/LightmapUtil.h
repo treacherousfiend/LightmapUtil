@@ -29,6 +29,8 @@ vector<launchArgument> launchArgs = {
 	launchArgument{"-v", "Show additional debug info"},
 	launchArgument{"-verbose", "Show additional debug info"},
 	launchArgument{"-qualitythreshold", "Set a custom threshold percentage for lightmap sample similarity\n                    Accepts decimals from 0-1 (Default is 0.03). It is recommended to set a percentage under 10%!"}, // spaces here are for formatting. its bad i know
+	launchArgument{"-ldr", "Only read LDR lightmaps even if map was compiled with both LDR and HDR lightmaps"},
+	launchArgument{"-hdr", "Only read HDR lightmaps even if map was compiled with both LDR and HDR lightmaps"}
 };
 
 bool verboseMode = false;
@@ -50,6 +52,7 @@ int main( int argc, char* argv[] );
 
 template< class T >
 void getLumpData( int lump, unsigned int &numObjects, T *lumpType );
+void checkSampleNeighbors( int lightmapSample1, int lightmapSample2, bool &LDRLightmapTooBig, bool &HDRLightmapTooBig );
 
 void readFaces();
 void helpScreen();

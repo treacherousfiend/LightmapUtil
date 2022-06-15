@@ -305,11 +305,38 @@ void readFaces()
 					}
 					// if both of these fail its ok, that just means we're at the end of our list!
 				}
-
-				// Get the approximate center of our face, its approximate because we only use 3 verts, i tried using all of them but couldn't figure it out
-				approxCenter.vertX = dvertexes[ vertArray[ 1 ] ].vertX - ( ( ( dvertexes[ vertArray[ 1 ] ].vertX - dvertexes[ vertArray[ 0 ] ].vertX ) + ( dvertexes[ vertArray[ 1 ] ].vertX - dvertexes[ vertArray[ 2 ] ].vertX ) ) / 2 );
-				approxCenter.vertY = dvertexes[ vertArray[ 1 ] ].vertY - ( ( ( dvertexes[ vertArray[ 1 ] ].vertY - dvertexes[ vertArray[ 0 ] ].vertY ) + ( dvertexes[ vertArray[ 1 ] ].vertY - dvertexes[ vertArray[ 2 ] ].vertY ) ) / 2 );
-				approxCenter.vertZ = dvertexes[ vertArray[ 1 ] ].vertZ - ( ( ( dvertexes[ vertArray[ 1 ] ].vertZ - dvertexes[ vertArray[ 0 ] ].vertZ ) + ( dvertexes[ vertArray[ 1 ] ].vertZ - dvertexes[ vertArray[ 2 ] ].vertZ ) ) / 2 );
+				
+				// get center of face
+				// this is a fairly standard implementation, except we check if the area is 0 -- in which case we just take the average
+				double area = 0.0;
+				dvertex_t center, point1, point2;
+				center.vertX = center.vertY = center.vertZ = 0;
+				point1.vertX = dvertexes[vertArray[0]].vertX;
+				point1.vertY = dvertexes[vertArray[0]].vertY;
+				point1.vertZ = dvertexes[vertArray[0]].vertZ;
+				point2.vertX = dvertexes[vertArray[1]].vertX;
+				point2.vertY = dvertexes[vertArray[1]].vertY;
+				point2.vertZ = dvertexes[vertArray[1]].vertZ;
+				for (int i = 2; i < numVerts; i++) {
+					dvertex_t point3, current;
+					point3.vertX = dvertexes[vertArray[i]].vertX;
+					point3.vertY = dvertexes[vertArray[i]].vertY;
+					point3.vertZ = dvertexes[vertArray[i]].vertZ;
+					current.vertX = (point3.vertY - point1.vertY) * (point3.vertZ - point2.vertZ) - (point3.vertZ - point1.vertZ) * (point3.vertY - point2.vertY);
+					current.vertY = (point3.vertZ - point1.vertZ) * (point3.vertX - point2.vertX) - (point3.vertX - point1.vertX) * (point3.vertZ - point1.vertZ);
+					current.vertZ = (point3.vertX - point1.vertX) * (point3.vertY - point2.vertY) - (point3.vertY - point1.vertY) * (point3.vertX - point2.vertX);
+					
+					double currentArea = sqrt(current.vertX * current.vertX + current.vertY * current.vertY + current.vertZ * current.vertZ) / 2.0;
+					area += currentArea;
+					center.vertX += (point1.vertX + point2.vertX + point3.vertX) / 3 * ((currentArea == 0) ? 1 : currentArea);
+					center.vertY += (point1.vertY + point2.vertY + point3.vertY) / 3 * ((currentArea == 0) ? 1 : currentArea);
+					center.vertZ += (point1.vertZ + point2.vertZ + point3.vertZ) / 3 * ((currentArea == 0) ? 1 : currentArea);
+				}
+				if (area != 0) {
+					center.vertX /= area;
+					center.vertY /= area;
+					center.vertZ /= area;
+				}
 
 				string direction = "UNKNOWN";
 				dplane_t curPlane = dplane[ curFace.planenum ];
@@ -344,7 +371,7 @@ void readFaces()
 
 				stringstream faceLog;
 
-				faceLog << "Face " << FaceID << " (" << approxCenter.vertX << " " << approxCenter.vertY << " " << approxCenter.vertZ << ") facing " << direction << " with texture " << Texture << " has " << LightmapIssue << " lightmap!";
+				faceLog << "Face " << FaceID << " (" << center.vertX << " " << center.vertY << " " << center.vertZ << ") facing " << direction << " with texture " << Texture << " has " << LightmapIssue << " lightmap!";
 
 				if (hasLDRLightmap == true && hasHDRLightmap == true)
 				{

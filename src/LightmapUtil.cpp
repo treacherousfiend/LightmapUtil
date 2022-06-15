@@ -213,6 +213,8 @@ void getLumpData( int lump, unsigned int &numObjects, T *lumpType )
 
 void readFaces()
 {
+	int vertArray[512];
+	
 	for (unsigned int i = 0; i < numFaces; i++)
 	{
 		dface_t curFace = dface[ i ];
@@ -286,11 +288,7 @@ void readFaces()
 					isNegative = true;
 					curEdge = abs( curEdge );
 				}
-				// 512 is a magic number, but the chances of a single face having 512, let alone 128 verts is ridiculous
-				// but its here because (simple) arrays like this cannot have sizes defined at runtime.
-				// maybe sometime i'll go back and make this actually good.
-				// but until then, this code will work until some crazy person somehow makes a face with 513 verts.
-				int vertArray[ 512 ];
+				
 				vertArray[ 0 ] = dedges[curEdge].v[ 0 ];
 				
 				for (int i = 1; i < numVerts; i++)

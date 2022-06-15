@@ -306,4 +306,24 @@ struct dvertex_t
 	float	vertX;
 	float	vertY;
 	float	vertZ;
+	
+	// constructors
+	dvertex_t()
+	{
+		vertX = 0;
+		vertY = 0;
+		vertZ = 0;
+	}
+	dvertex_t(dvertex_t &vert)
+	{
+		vertX = vert.vertX;
+		vertY = vert.vertY;
+		vertZ = vert.vertZ;
+	}
+	dvertex_t(float x, float y, float z)
+	{
+		vertX = x;
+		vertY = y;
+		vertZ = z;
+	}
 };

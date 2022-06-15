@@ -213,6 +213,8 @@ void getLumpData( int lump, unsigned int &numObjects, T *lumpType )
 
 void readFaces()
 {
+	int vertArray[512];
+	
 	for (unsigned int i = 0; i < numFaces; i++)
 	{
 		dface_t curFace = dface[ i ];
@@ -286,25 +288,12 @@ void readFaces()
 					isNegative = true;
 					curEdge = abs( curEdge );
 				}
-				// 512 is a magic number, but the chances of a single face having 512, let alone 128 verts is ridiculous
-				// but its here because (simple) arrays like this cannot have sizes defined at runtime.
-				// maybe sometime i'll go back and make this actually good.
-				// but until then, this code will work until some crazy person somehow makes a face with 513 verts.
-				int vertArray[ 512 ];
+				
 				vertArray[ 0 ] = dedges[curEdge].v[ 0 ];
 				
-				// potentially I can have the isNegative check outside of this for loop and save a little bit of time.
-				// just haven't done it (yet)
 				for (int i = 1; i < numVerts; i++)
 				{
-					if (isNegative)
-					{
-						curEdge -= 1;
-					}
-					else
-					{
-						curEdge += 1;
-					}
+					curEdge += (isNegative) ? -1 : 1;
 
 					if (vertArray[ i - 1 ] != dedges[ curEdge ].v[ 0 ])
 					{
@@ -334,59 +323,17 @@ void readFaces()
 					switch (curPlane.type)
 					{
 					case 0:
-						if (curPlane.normalX < 0)
-						{
-							direction = "west";
-						}
-						else
-						{
-							direction = "east";
-						}
+						direction = (curPlane.normalX < 0) ? "west" : "east";
 					case 1:
-						if (curPlane.normalY < 0)
-						{
-							direction = "south";
-						}
-						else
-						{
-							direction = "north";
-						}
+						direction = (curPlane.normalY < 0) ? "south" : "north";
 					case 2:
-						if (curPlane.normalZ < 0)
-						{
-							direction = "down";
-						}
-						else
-						{
-							direction = "up";
-						}
+						direction = (curPlane.normalZ < 0) ? "down" : "up";
 					case 3:
-						if (curPlane.normalX < 0)
-						{
-							direction = "mostly west";
-						}
-						else
-						{
-							direction = "mostly east";
-						}
+						direction = (curPlane.normalX < 0) ? "mostly west" : "mostly east";
 					case 4:
-						if (curPlane.normalY < 0)
-						{
-							direction = "mostly south";
-						}
-						else
-						{
-							direction = "mostly north";
-						}
+						direction = (curPlane.normalY < 0) ? "mostly south" : "mostly north";
 					case 5:
-						if (curPlane.normalZ < 0)
-						{
-							direction = "mostly down";
-						}
-						else
-						{
-							direction = "mostly up";
-						}
+						direction = (curPlane.normalZ < 0) ? "mostly down" : "mostly up";
 					}
 				}
 

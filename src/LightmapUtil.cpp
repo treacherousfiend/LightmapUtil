@@ -308,7 +308,8 @@ void readFaces()
 				double area = 0.0;
 				dvertex_t center, point1(dvertexes[vertArray[0]]), point2(dvertexes[vertArray[1]]);
 				
-				for (int i = 2; i < numVerts; i++) {
+				for (int i = 2; i < numVerts; i++)
+				{
 					dvertex_t point3(dvertexes[vertArray[i]]), current;
 					current.vertX = (point3.vertY - point1.vertY) * (point3.vertZ - point2.vertZ) - (point3.vertZ - point1.vertZ) * (point3.vertY - point2.vertY);
 					current.vertY = (point3.vertZ - point1.vertZ) * (point3.vertX - point2.vertX) - (point3.vertX - point1.vertX) * (point3.vertZ - point1.vertZ);
@@ -318,7 +319,8 @@ void readFaces()
 					area += currentArea;
 					center += (point1 + point2 + point3) / 3 * ((currentArea == 0) ? 1 : currentArea);
 				}
-				if (area != 0) {
+				if (area != 0)
+				{
 					center /= area;
 				}
 

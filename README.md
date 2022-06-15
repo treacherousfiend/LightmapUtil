@@ -1,5 +1,7 @@
 # LightmapUtil
 
+[![Packaging status](https://repology.org/badge/vertical-allrepos/lightmaputil.svg)](https://repology.org/project/lightmaputil/versions)
+
 A simple command line utility to tell you if your lightmaps are too high resolution (and maybe more soon?)
 
 ## Usage

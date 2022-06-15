@@ -306,4 +306,72 @@ struct dvertex_t
 	float	vertX;
 	float	vertY;
 	float	vertZ;
+	
+	// constructors
+	dvertex_t()
+	{
+		vertX = 0;
+		vertY = 0;
+		vertZ = 0;
+	}
+	dvertex_t(dvertex_t &vert)
+	{
+		vertX = vert.vertX;
+		vertY = vert.vertY;
+		vertZ = vert.vertZ;
+	}
+	dvertex_t(float x, float y, float z)
+	{
+		vertX = x;
+		vertY = y;
+		vertZ = z;
+	}
+	
+	// operators
+	struct dvertex_t& operator+=(dvertex_t rhs)
+	{
+		vertX += rhs.vertX;
+		vertY += rhs.vertY;
+		vertZ += rhs.vertZ;
+		return *this;
+	}
+	struct dvertex_t& operator-=(dvertex_t rhs)
+	{
+		vertX -= rhs.vertX;
+		vertY -= rhs.vertY;
+		vertZ -= rhs.vertZ;
+		return *this;
+	}
+	struct dvertex_t& operator*=(float rhs)
+	{
+		vertX *= rhs;
+		vertY *= rhs;
+		vertZ *= rhs;
+		return *this;
+	}
+	struct dvertex_t& operator/=(float rhs)
+	{
+		vertX /= rhs;
+		vertY /= rhs;
+		vertZ /= rhs;
+		return *this;
+	}
 };
+
+// vertex operators
+dvertex_t operator+(dvertex_t lhs, dvertex_t rhs)
+{
+	return lhs += rhs;
+}
+dvertex_t operator-(dvertex_t lhs, dvertex_t rhs)
+{
+	return lhs -= rhs;
+}
+dvertex_t operator*(dvertex_t lhs, float rhs)
+{
+	return lhs *= rhs;
+}
+dvertex_t operator/(dvertex_t lhs, float rhs)
+{
+	return lhs /= rhs;
+}

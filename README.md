@@ -1,7 +1,5 @@
 # LightmapUtil
 
-![AUR maintainer](https://img.shields.io/aur/maintainer/lightmaputil-git)
-
 A simple command line utility to tell you if your lightmaps are too high resolution (and maybe more soon?)
 
 ## Usage

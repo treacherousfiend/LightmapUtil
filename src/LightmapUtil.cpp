@@ -316,14 +316,10 @@ void readFaces()
 					
 					double currentArea = sqrt(current.vertX * current.vertX + current.vertY * current.vertY + current.vertZ * current.vertZ) / 2.0;
 					area += currentArea;
-					center.vertX += (point1.vertX + point2.vertX + point3.vertX) / 3 * ((currentArea == 0) ? 1 : currentArea);
-					center.vertY += (point1.vertY + point2.vertY + point3.vertY) / 3 * ((currentArea == 0) ? 1 : currentArea);
-					center.vertZ += (point1.vertZ + point2.vertZ + point3.vertZ) / 3 * ((currentArea == 0) ? 1 : currentArea);
+					center += (point1 + point2 + point3) / 3 * ((currentArea == 0) ? 1 : currentArea);
 				}
 				if (area != 0) {
-					center.vertX /= area;
-					center.vertY /= area;
-					center.vertZ /= area;
+					center /= area;
 				}
 
 				string direction = "UNKNOWN";

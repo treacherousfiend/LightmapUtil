@@ -5,6 +5,7 @@
 #include <vector>
 #include <filesystem>
 #include <cstring>
+#include <cmath>
 
 #include "LightmapUtil.h"
 

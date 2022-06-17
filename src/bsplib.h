@@ -356,22 +356,35 @@ struct dvertex_t
 		vertZ /= rhs;
 		return *this;
 	}
+	
+	dvertex_t operator+(dvertex_t rhs)
+	{
+		rhs.vertX += vertX;
+		rhs.vertY += vertY;
+		rhs.vertZ += vertZ;
+		return rhs;
+	}
+	dvertex_t operator-(dvertex_t rhs)
+	{
+		rhs.vertX -= vertX;
+		rhs.vertY -= vertY;
+		rhs.vertZ -= vertZ;
+		return rhs;
+	}
+	dvertex_t operator*(float rhs)
+	{
+		dvertex_t toret(*this);
+		toret.vertX *= rhs;
+		toret.vertY *= rhs;
+		toret.vertZ *= rhs;
+		return toret;
+	}
+	dvertex_t operator/(float rhs)
+	{
+		dvertex_t toret(*this);
+		toret.vertX /= rhs;
+		toret.vertY /= rhs;
+		toret.vertZ /= rhs;
+		return toret;
+	}
 };
-
-// vertex operators
-dvertex_t operator+(dvertex_t lhs, dvertex_t rhs)
-{
-	return lhs += rhs;
-}
-dvertex_t operator-(dvertex_t lhs, dvertex_t rhs)
-{
-	return lhs -= rhs;
-}
-dvertex_t operator*(dvertex_t lhs, float rhs)
-{
-	return lhs *= rhs;
-}
-dvertex_t operator/(dvertex_t lhs, float rhs)
-{
-	return lhs /= rhs;
-}

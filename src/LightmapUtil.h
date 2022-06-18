@@ -52,7 +52,7 @@ int main( int argc, char* argv[] );
 
 template< class T >
 void getLumpData( int lump, unsigned int &numObjects, T *lumpType );
-void checkSampleNeighbors( int lightmapSample1, int lightmapSample2, bool &LDRLightmapTooBig, bool &HDRLightmapTooBig );
+void checkSampleNeighbors( int lightmapSample1, int lightmapSample2, int lightmapOffset, bool &LDRLightmapTooBig, bool &HDRLightmapTooBig );
 
 void readFaces();
 int helpScreen();

@@ -256,7 +256,7 @@ void readFaces()
 
 					if (lightmapSample2 >= 0 && lightmapSample2 < lightmapSize)
 					{
-						checkSampleNeighbors(lightmapSample1, lightmapSample2, LDRLightmapTooBig, HDRLightmapTooBig);
+						checkSampleNeighbors(lightmapSample1, lightmapSample2, lightmapOffset, LDRLightmapTooBig, HDRLightmapTooBig);
 						if (LDRLightmapTooBig == false && HDRLightmapTooBig == false)
 						{
 							// early out if we've already determined that this isn't too big
@@ -392,8 +392,15 @@ void readFaces()
 	}
 }
 
-void checkSampleNeighbors( int lightmapSample1, int lightmapSample2, bool &LDRLightmapTooBig, bool &HDRLightmapTooBig)
+void checkSampleNeighbors( int lightmapSample1, int lightmapSample2, int lightmapOffset, bool &LDRLightmapTooBig, bool &HDRLightmapTooBig)
 {
+	// Add the lightmap offset to these samples.
+	// Idk the best way to explain this, but essentially, because we read directly from the lightmap lump, we need to add the offset so that we read the right samples.
+	// in theory this could be done faster by doing it externally, but I chose better code readability over speed.
+	// I also experimented with copying the samples we need to a separate struct, but couldn't get it to work.
+	lightmapSample1 += lightmapOffset;
+	lightmapSample2 += lightmapOffset;
+
 	// this is a mess and i hate it, essentially the RGB values they use in game are the raw color values multiplied by 2^exponent / 255
 	// Valve's code is extremely speed focused, so the way they handle the exponent is super confusing
 	// if you ever need to look into it, they've precomputed all of the values (2^-128 to 2^127), but arrays require positive numbers, so they add 128 to the exponent's value to find it.

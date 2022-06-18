@@ -16,6 +16,7 @@ int main( int argc, char *argv[] )
 
 	cout << "LightmapUtil v" << PROGRAM_VERSION << "\n";
 	
+	// If the program was opened without any launch arguments or map file, display the help screen
 	if (argc == 1)
 	{
 		return helpScreen();
@@ -171,7 +172,6 @@ int main( int argc, char *argv[] )
 	{
 		hasLDRLightmap = true;
 	}
-
 	if (numLightmapsHDR != 0)
 	{
 		hasHDRLightmap = true;

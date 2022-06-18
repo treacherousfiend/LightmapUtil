@@ -164,6 +164,7 @@ enum
 // remove references to DECLARE_BYTWSWAP_DATADESC() which is a macro Valve has to swap endianness
 // replace vectors with 3 floats (Valve's vectors are NOT the same as C++ Standard vectors)
 // replace "byte" with unsigned char (it is simply used for clarity in Valve's code)
+// Constructors and operator overloads added to dvertex_t
 
 struct ColorRGBExp32
 {
@@ -257,7 +258,7 @@ inline unsigned short dface_t::GetNumPrims() const
 
 inline void dface_t::SetNumPrims( unsigned short nPrims )
 {
-	// (fiend) Assert changed to assert because one is valve defined and one is c++ standard
+	// (fiend) "Assert" changed to "assert" because one is valve defined and one is c++ standard
 	assert( ( nPrims & 0x8000 ) == 0 );
 	m_NumPrims &= ~0x7FFF;
 	m_NumPrims |= ( nPrims & 0x7FFF );

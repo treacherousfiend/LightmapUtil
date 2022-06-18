@@ -18,6 +18,10 @@ This is developed with VS v143 Platform Toolset. Other configurations may work, 
 
 ## For Developers
 
+### Issues
+
+Currently MSVC does not build due to an issue I can't figure out with operator overleading.
+
 ### To-do
  
 - Tell the user if they have lightmaps which are too low res

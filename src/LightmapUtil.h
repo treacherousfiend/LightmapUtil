@@ -7,6 +7,16 @@ using namespace std;
 
 #define PROGRAM_VERSION		4
 
+enum // Exit Codes
+{
+	EXIT_NOINPUT = 2,
+	EXIT_NOTBSP = 3,
+	EXIT_INVALIDLOGFILE = 4,
+	EXIT_INVALIDTHRESHOLD = 5,
+	EXIT_NOLIGHTMAPS = 6,
+	EXIT_MAPCOMPRESSED = 7,
+};
+
 ifstream in; // This is the default stream we use
 void* bspFile; // This is going to be where the full BSP file is stored
 			   // it is a separate thing from the input buffer because in order to do memcpy we need to actually know where the damn thing is in memory

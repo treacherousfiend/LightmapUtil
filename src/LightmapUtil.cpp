@@ -51,7 +51,7 @@ int main( int argc, char *argv[] )
 			if (!filesystem::path( filePath ).has_relative_path())
 			{
 				cerr << "Logfile path is invalid!\n";
-				return 4;
+				return EXIT_INVALIDLOGFILE;
 			}
 		}
 		// -v OR -verbose
@@ -65,7 +65,7 @@ int main( int argc, char *argv[] )
 			if (!argv[ i + 1 ])
 			{
 				cerr << "No value input after -qualitythreshold!\n";
-				return 5;
+				return EXIT_INVALIDTHRESHOLD;
 			}
 
 			lightmapQualityEpsilon = strtof(argv[ i + 1 ], NULL);
@@ -96,7 +96,7 @@ int main( int argc, char *argv[] )
 	if ( !in.is_open() )
 	{
 		cerr << "Couldn't find input file! Check if you spelled it correctly!\n";
-		return 2;
+		return EXIT_NOINPUT;
 	}
 
 	// if logFile is not already set, set it to default
@@ -136,7 +136,7 @@ int main( int argc, char *argv[] )
 		{
 			cout << "DEBUG: BSP ident was " << dheader->ident << "\n";
 		}
-		return 3;
+		return EXIT_NOTBSP;
 	}
 
 	if (dheader->version < 17)
@@ -164,7 +164,7 @@ int main( int argc, char *argv[] )
 	if (numLightmapsLDR == 0 && numLightmapsHDR == 0)
 	{
 		cerr << "ERROR: Could not read lightmap lumps!\n";
-		return 6;
+		return EXIT_NOLIGHTMAPS;
 	}
 	
 	// Check which lightmap lumps we've read so that we don't waste time attempting to compare non-existant lightmaps later
@@ -185,6 +185,11 @@ int main( int argc, char *argv[] )
 	getLumpData( LUMP_EDGES, numEdges, dedges );
 	getLumpData( LUMP_SURFEDGES, numSurfedges, dsurfedges );
 	getLumpData( LUMP_VERTEXES, numVertices, dvertexes );
+
+	if (isMapCompressed == true)
+	{
+		return EXIT_MAPCOMPRESSED;
+	}
 
 	cout << "Copied all lumps! Checking lightmaps...\n";
 
@@ -486,5 +491,5 @@ int helpScreen()
 			cout << commandMessage;
 		}
 	}
-  return 0;
+  return EXIT_SUCCESS;
 }

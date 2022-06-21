@@ -48,6 +48,8 @@ bool checkHDRLightmap = true;
 bool hasLDRLightmap = false;
 bool hasHDRLightmap = false;
 
+bool isMapCompressed = false;
+
 int main( int argc, char* argv[] );
 
 template< class T >

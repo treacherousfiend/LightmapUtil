@@ -192,7 +192,7 @@ int main( int argc, char *argv[] )
 
 	cout << "Finished reading lightmaps, check the log file (" << fileName << ") to see the results!\n";
 	
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 
@@ -205,7 +205,22 @@ void getLumpData( int lump, unsigned int &numObjects, T *lumpType )
 
 	numObjects = lumpLength / sizeof( T );
 
-	memcpy( lumpType, (unsigned char*) bspFile + lumpOffset, lumpLength);
+	string LZMAHeader;
+	LZMAHeader = (char*)malloc( 4 );
+	LZMAHeader.resize( 4 );
+	memcpy( &LZMAHeader, ( unsigned char* ) bspFile + lumpOffset, 4 );
+	if (LZMAHeader.compare("LZMA") == 0)
+	{
+		// don't spam the console if we're compressed
+		if (isMapCompressed == false)
+		{
+			cerr << "Map file is compressed, this isn't supported right now!\n";
+			isMapCompressed = true;
+		}
+		return;
+	}
+
+	memcpy( lumpType, ( unsigned char* ) bspFile + lumpOffset, lumpLength );
 	if (verboseMode)
 	{
 		cout << "Copied lump " << lump << "!\n";

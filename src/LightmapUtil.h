@@ -5,7 +5,7 @@
 
 using namespace std;
 
-#define PROGRAM_VERSION		4
+#define PROGRAM_VERSION		5
 
 enum // Exit Codes
 {

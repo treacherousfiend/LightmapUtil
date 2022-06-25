@@ -32,6 +32,6 @@ Currently MSVC does not build due to an issue I can't figure out with operator o
 
 ### Licensing
 
-This repository is unlicensed -- almost all of the BSP reading related code (in bsplib.h and the other code files) is either taken directly from the [Source 2013 SDK](https://github.com/ValveSoftware/source-sdk-2013/) or heavily based on it.
+This repository is released into the public domain using the license "The Unlicense"  -- almost all of the BSP reading related code (in bsplib.h and the other code files) is either taken directly from the [Source 2013 SDK](https://github.com/ValveSoftware/source-sdk-2013/) or heavily based on it.
 
 I am not a lawyer this is the best I can do for a licensing section.

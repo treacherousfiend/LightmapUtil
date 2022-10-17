@@ -382,20 +382,18 @@ void readFaces()
 
 				if (hasLDRLightmap == true && hasHDRLightmap == true)
 				{
-					if (LDRLightmapTooBig == true && HDRLightmapTooBig == true)
+					if (LDRLightmapTooBig == true && HDRLightmapTooBig != true)
 					{
-						faceLog << "\n";
-					}
-					else if (LDRLightmapTooBig == true)
-					{
-						faceLog << " (LDR)\n";
+						faceLog << " (LDR)";
 					}
 					// probably don't need this to be an else if, but its clearer what it does
-					else if (HDRLightmapTooBig == true)
+					else if (HDRLightmapTooBig == true && LDRLightmapTooBig != true)
 					{
-						faceLog << " (HDR)\n";
+						faceLog << " (HDR)";
 					}
 				}
+
+				faceLog << "\n";
 
 				string logString = faceLog.str();
 

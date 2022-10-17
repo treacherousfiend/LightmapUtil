@@ -127,7 +127,7 @@ int main( int argc, char *argv[] )
 	// copy the header
 	// kinda bad because i hardcode the headersize, but oh well.
 	dheader = (dheader_t*)malloc(1036);
-	memcpy( dheader, ( unsigned char* ) bspFile, 1036 );
+	memcpy_s( dheader, 1036, ( unsigned char* ) bspFile, 1036 );
 
 	if (dheader->ident != IDBSPHEADER)
 	{
@@ -213,7 +213,7 @@ void getLumpData( int lump, unsigned int &numObjects, T *lumpType )
 	string LZMAHeader;
 	LZMAHeader = (char*)malloc( 4 );
 	LZMAHeader.resize( 4 );
-	memcpy( &LZMAHeader, ( unsigned char* ) bspFile + lumpOffset, 4 );
+	memcpy_s( &LZMAHeader, 4, ( unsigned char* ) bspFile + lumpOffset, 4 );
 	if (LZMAHeader.compare("LZMA") == 0)
 	{
 		// don't spam the console if we're compressed
@@ -225,7 +225,7 @@ void getLumpData( int lump, unsigned int &numObjects, T *lumpType )
 		return;
 	}
 
-	memcpy( lumpType, ( unsigned char* ) bspFile + lumpOffset, lumpLength );
+	memcpy_s( lumpType, lumpLength, (( unsigned char* ) bspFile + lumpOffset), lumpLength );
 	if (verboseMode)
 	{
 		cout << "Copied lump " << lump << "!\n";

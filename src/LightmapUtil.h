@@ -19,7 +19,7 @@ enum // Exit Codes
 
 ifstream in; // This is the default stream we use
 void* bspFile; // This is going to be where the full BSP file is stored
-			   // it is a separate thing from the input buffer because in order to do memcpy we need to actually know where the damn thing is in memory
+			   // it is a separate thing from the input buffer because in order to do memcpy_s we need to actually know where the damn thing is in memory
 ofstream logFile; // This stores the log file which we output the data to!
 string fileName; // The file name for our log file
 string filePath; // the path to our log file

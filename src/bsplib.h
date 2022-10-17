@@ -357,22 +357,24 @@ struct dvertex_t
 		vertZ /= rhs;
 		return *this;
 	}
+
+	// vertex operators
+	struct dvertex_t& operator+(dvertex_t rhs)
+	{
+		return *this += rhs;
+	}
+	struct dvertex_t& operator-(dvertex_t rhs)
+	{
+		return *this -= rhs;
+	}
+	struct dvertex_t& operator*(float rhs)
+	{
+		return *this *= rhs;
+	}
+	struct dvertex_t& operator/(float rhs)
+	{
+		return *this /= rhs;
+	}
 };
 
-// vertex operators
-dvertex_t operator+(dvertex_t lhs, dvertex_t rhs)
-{
-	return lhs += rhs;
-}
-dvertex_t operator-(dvertex_t lhs, dvertex_t rhs)
-{
-	return lhs -= rhs;
-}
-dvertex_t operator*(dvertex_t lhs, float rhs)
-{
-	return lhs *= rhs;
-}
-dvertex_t operator/(dvertex_t lhs, float rhs)
-{
-	return lhs /= rhs;
-}
+

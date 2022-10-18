@@ -359,21 +359,35 @@ struct dvertex_t
 	}
 
 	// vertex operators
-	struct dvertex_t& operator+(dvertex_t rhs)
+	dvertex_t& operator+(dvertex_t rhs)
 	{
-		return *this += rhs;
+		rhs.vertX += vertX;
+		rhs.vertY += vertY;
+		rhs.vertZ += vertZ;
+		return rhs;
 	}
-	struct dvertex_t& operator-(dvertex_t rhs)
+	dvertex_t& operator-(dvertex_t rhs)
 	{
-		return *this -= rhs;
+		rhs.vertX -= vertX;
+		rhs.vertY -= vertY;
+		rhs.vertZ -= vertZ;
+		return rhs;
 	}
-	struct dvertex_t& operator*(float rhs)
+	dvertex_t& operator*(float rhs)
 	{
-		return *this *= rhs;
+		dvertex_t tempVert(*this);
+		vertX *= rhs;
+		vertY *= rhs;
+		vertZ *= rhs;
+		return *this;
 	}
-	struct dvertex_t& operator/(float rhs)
+	dvertex_t& operator/(float rhs)
 	{
-		return *this /= rhs;
+		dvertex_t tempVert(*this);
+		vertX /= rhs;
+		vertY /= rhs;
+		vertZ /= rhs;
+		return *this;
 	}
 };
 

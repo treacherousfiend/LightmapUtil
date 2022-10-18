@@ -210,10 +210,8 @@ void getLumpData( int lump, unsigned int &numObjects, T *lumpType )
 
 	numObjects = lumpLength / sizeof( T );
 
-	string LZMAHeader;
-	LZMAHeader = (char*)malloc( 4 );
-	LZMAHeader.resize( 4 );
-	memcpy( &LZMAHeader, ( unsigned char* ) bspFile + lumpOffset, 4 );
+	string LZMAHeader ( 4, 'x');
+	memcpy( LZMAHeader.data(), (unsigned char*) bspFile + lumpOffset, 4);
 	if (LZMAHeader.compare("LZMA") == 0)
 	{
 		// don't spam the console if we're compressed

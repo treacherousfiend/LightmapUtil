@@ -28,6 +28,16 @@ int main( int argc, char *argv[] )
 	{
 		in.open( argv[ 1 ], ios::binary );
 	}
+	else
+	{
+	// If we can't find the file, check if the user omitted the ".bsp" at the end
+		string tempFileName( argv[ 1 ]);
+		tempFileName.append(".bsp");
+		if ( filesystem::exists( tempFileName ) )
+		{
+			in.open(tempFileName, ios::binary);
+		}
+	}
 
 	fileName = filesystem::path( argv[ 1 ] ).filename().stem().string() + "-LightmapUtilLog.txt";
 
